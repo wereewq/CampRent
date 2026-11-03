@@ -39,9 +39,59 @@ class EquipmentListNotifier extends ChangeNotifier {
   }
 
   void setFilter({String? search, int? categoryId}) {
-    if (search != null) _search = search;
+    if (search != null) {
+      _search = search;
+    }
     _categoryId = categoryId;
     load();
+  }
+
+  Future<void> createEquipment({
+    required String name,
+    required String brand,
+    required double dailyPrice,
+    required double deposit,
+    required int categoryId,
+    String? status,
+    String? serialNumber,
+    int? maxLoadKg,
+  }) async {
+    await _repo.createEquipment(
+      name: name,
+      brand: brand,
+      dailyPrice: dailyPrice,
+      deposit: deposit,
+      categoryId: categoryId,
+      status: status,
+      serialNumber: serialNumber,
+      maxLoadKg: maxLoadKg,
+    );
+    await load();
+  }
+
+  Future<void> updateEquipment(
+    int id, {
+    required String name,
+    required String brand,
+    required double dailyPrice,
+    required double deposit,
+    required int categoryId,
+    String? status,
+    String? serialNumber,
+    int? wearPercent,
+  }) async {
+    await _repo.updateEquipment(
+      id,
+      name: name,
+      brand: brand,
+      dailyPrice: dailyPrice,
+      deposit: deposit,
+      categoryId: categoryId,
+      status: status,
+      serialNumber: serialNumber,
+      wearPercent: wearPercent,
+    );
+    await load();
   }
 
   Future<void> remove(int id) async {

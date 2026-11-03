@@ -36,9 +36,19 @@ class _MyRentalsScreenState extends State<MyRentalsScreen> {
         });
       }
     } on ApiException catch (e) {
-      if (mounted) setState(() { _error = e.message; _loading = false; });
+      if (mounted) {
+        setState(() {
+          _error = e.message;
+          _loading = false;
+        });
+      }
     } catch (_) {
-      if (mounted) setState(() { _error = 'Не удалось загрузить историю аренды'; _loading = false; });
+      if (mounted) {
+        setState(() {
+          _error = 'Не удалось загрузить историю аренды';
+          _loading = false;
+        });
+      }
     }
   }
 
@@ -70,21 +80,31 @@ class _MyRentalsScreenState extends State<MyRentalsScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(_error!, style: const TextStyle(color: Colors.red)),
+                        Text(
+                          _error!,
+                          style: const TextStyle(color: Colors.red),
+                        ),
                         const SizedBox(height: 12),
-                        FilledButton(onPressed: _fetchOrders, child: const Text('Повторить')),
+                        FilledButton(
+                          onPressed: _fetchOrders,
+                          child: const Text('Повторить'),
+                        ),
                       ],
                     ),
                   );
                 }
                 if (_orders.isEmpty) {
                   return const Center(
-                    child: Text('У вас пока нет активных бронирований', style: TextStyle(fontSize: 16)),
+                    child: Text(
+                      'У вас пока нет активных бронирований',
+                      style: TextStyle(fontSize: 16),
+                    ),
                   );
                 }
                 return ListView.separated(
                   itemCount: _orders.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 12),
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 12),
                   itemBuilder: (ctx, i) {
                     final order = _orders[i];
                     final isActive = order.status == 'active';
@@ -100,25 +120,39 @@ class _MyRentalsScreenState extends State<MyRentalsScreen> {
                               children: [
                                 Text(
                                   'Заказ #${order.id} • Инвентарь #${order.equipmentId}',
-                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
                                 ),
                                 Chip(
-                                  label: Text(isActive ? 'Активна' : 'Завершена'),
-                                  backgroundColor: isActive ? Colors.green.shade100 : Colors.grey.shade200,
+                                  label: Text(
+                                    isActive ? 'Активна' : 'Завершена',
+                                  ),
+                                  backgroundColor: isActive
+                                      ? Colors.green.shade100
+                                      : Colors.grey.shade200,
                                   labelStyle: TextStyle(
-                                    color: isActive ? Colors.green.shade900 : Colors.black87,
+                                    color: isActive
+                                        ? Colors.green.shade900
+                                        : Colors.black87,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ],
                             ),
                             const Divider(height: 16),
-                            Text('Период аренды: ${order.startDate} — ${order.endDate} (${order.totalDays} сут.)'),
+                            Text(
+                              'Период аренды: ${order.startDate} — ${order.endDate} (${order.totalDays} сут.)',
+                            ),
                             const SizedBox(height: 4),
-                            Text('Тариф: ${order.dailyRate.toStringAsFixed(0)} ₽/сут' +
-                                (order.discountPercent > 0 ? ' (скидка ${order.discountPercent}%)' : '')),
+                            Text(
+                              'Тариф: ${order.dailyRate.toStringAsFixed(0)} ₽/сут${order.discountPercent > 0 ? " (скидка ${order.discountPercent}%)" : ""}',
+                            ),
                             const SizedBox(height: 4),
-                            Text('Залог: ${order.depositAmount.toStringAsFixed(0)} ₽'),
+                            Text(
+                              'Залог: ${order.depositAmount.toStringAsFixed(0)} ₽',
+                            ),
                             const SizedBox(height: 8),
                             Text(
                               'Итого к оплате: ${order.totalAmount.toStringAsFixed(0)} ₽',

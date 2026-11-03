@@ -83,4 +83,21 @@ void main() {
       expect(Role.librarian.level > Role.reader.level, isTrue);
     });
   });
+
+  group('5. Расчёт стоимости с аксессуарами (M:N)', () {
+    test('Учёт спасательного жилета и гермомешка в общей смете', () {
+      final res = RentalCalculator.calculate(
+        start: DateTime(2026, 6, 1),
+        end: DateTime(2026, 6, 4),
+        dailyRate: 1500,
+        deposit: 5000,
+        accessoriesDailyTotal: 350,
+      );
+      expect(res.days, 3);
+      expect(res.discountPercent, 10);
+      expect(res.discountedCost, 4050);
+      expect(res.accessoriesCost, 1050);
+      expect(res.total, 10100);
+    });
+  });
 }
